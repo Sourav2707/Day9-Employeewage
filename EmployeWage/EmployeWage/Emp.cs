@@ -3,65 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace EmployeeWage
 {
-    public interface IEmployeeWageForCompany
+    public class Emp
     {
-        public int rndm();
-        public int wage();
-        public void compute(String company, int WaPhr, int max_workDays, int max_workHrs);
-    }
+        int fullTime = 1;
+        int partTime = 2;
+        int empHr = 0;
+        int empWage = 0;
+        int totalEmpHr = 0;
+        int totalDay = 0;
+        public void Wage(string comp, int wagePerHR, int totalWorkingdays, int totalWorkingHR)
+        {
+            Console.WriteLine($"Company name : {comp}");
 
-
-    internal class Wages : IEmployeeWageForCompany
-    {
-        static int day_hr;
-        static int WaPhr = 20;
-        public int rndm()               //for geting a random number
-        {
-            Random ran = new Random();
-            return (ran.Next(0, 2));               //randomly checking present or absent
-        }
-        public int wage()                //for calculating the daily wage through switch case
-        {
-            int ch = new Random().Next(0, 3);
-            day_hr = 0;
-            switch (ch)
+            do
             {
-                case 1:
-                    day_hr = 4;
-                    // Console.WriteLine("Employee is working Part Time");
-                    break;
-                case 2:
-                    day_hr = 8;
-                    // Console.WriteLine("Employee is working Full Time");
-                    break;
-                default:
-                    day_hr = 0;
-                    // Console.WriteLine("Absent");
-                    break;
-            }
-            return (WaPhr * day_hr);
-        }
-        public void compute(String company, int WaPhr, int max_workDays, int max_workHrs)                //for calculating the monthly wage for each company
-        {
-            Console.WriteLine(company);
-            int days = 0;
-            int totHrs = 0;                     //total hrs present or absent
-            int ToMonWag = 0;                  //total Monthly working wage
-            while (days < max_workDays && totHrs < max_workHrs)
-            {
-                Wages obj = new Wages();
-                ToMonWag = ToMonWag + (obj.wage());
-                days++;
-                totHrs = totHrs + day_hr;
-                // Console.WriteLine("days=" + days + " total hrs= " + totHrs + " Total wage till now = " + ToMonWag);
-                if (totHrs > max_workHrs)                           //If day <20 &  total hrs > max_workHrs
+                //new operator creates an object from the class by allocating memory for the new object and returning a reference to thet memory
+                Random random = new Random();
+                int attendCheck = random.Next(0, 3);
+                if (attendCheck == fullTime)
                 {
-                    ToMonWag = ToMonWag - ((totHrs - max_workHrs) * WaPhr);
+                    empHr = 8;
+                    Console.WriteLine($"Full time employee");
                 }
-            }
-            Console.WriteLine("Total wage of the employee for the month is = Rs." + ToMonWag);  //total monthly wage of the employee
+                else if (attendCheck == partTime)
+                {
+                    empHr = 4;
+                    Console.WriteLine("Part time employee");
+                }
+                else
+                {
+                    empHr = 0;
+                    Console.WriteLine("The employee is absent");
+                }
+                totalEmpHr = totalEmpHr + empHr;
+                empWage = empHr * wagePerHR;
+                Console.WriteLine($"Employee wage is {empWage}");
+                totalDay++;
+            } while (totalEmpHr <= totalWorkingHR && totalDay < totalWorkingdays);
+            Console.WriteLine($"The total working days per month is {totalWorkingdays} and total working hours is {totalEmpHr}");
+            empWage = totalEmpHr * wagePerHR;
+            Console.WriteLine($"Employee wage is {empWage}");
         }
     }
 }
